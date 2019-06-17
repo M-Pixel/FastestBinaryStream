@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <LangVersion>latest</LangVersion>
+        <AssemblyName>FastestBinaryStream</AssemblyName>
+        <Version>0.0.2</Version>
+        <Authors>M-Pixel</Authors>
+        <Company>FLOSS</Company>
+        <Description>Fluent interface for binary protocol implementation, aiming to prioritize runtime performance above all else.  An alternative to System.IO.MemoryStream + System.IO.BinaryReader &amp; System.IO.BinaryWriter, and also System.Convert, that is better suited than the .NET (Core) implementations for performance-sensitive code (code for low-power platforms, high-volume/low-latency systems, games, etc.).</Description>
+        <Copyright>Copyright 2019 Max Pixel</Copyright>
+        <PackageLicenseExpression>LGPL-3.0-only</PackageLicenseExpression>
+        <PackageReleaseNotes>Initial release: Mostly complete (but mostly untested) Put(Big)/Write(Big)/Get/Read/Flush/Base64 for POD types.</PackageReleaseNotes>
+        <PackageTags>Binary</PackageTags>
+        <IncludeSource>True</IncludeSource>
+        <RepositoryUrl>https://github.com/M-Pixel/FastestBinaryStream</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
+    </ItemGroup>
+
+</Project>
