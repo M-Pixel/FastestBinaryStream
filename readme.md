@@ -4,6 +4,8 @@ alternative to `System.IO.MemoryStream` + `System.IO.BinaryReader` & `System.IO.
 `System.Convert`, that is better suited than the .NET (Core) implementations for performance-sensitive code (code for
 low-power platforms, high-volume/low-latency systems, games, etc.).
 
+Accepting [PRs](https://github.com/M-Pixel/FastestBinaryStream/pulls), [Wiki](https://github.com/M-Pixel/FastestBinaryStream/wiki) contributions, and [Issues](https://github.com/M-Pixel/FastestBinaryStream/issues) of all kinds: bugs, questions, complaints & suggestions, requests, etc.
+
 ## To-Do
 - Test, and evaluate IL, to ensure that implementations are, in fact, the fastest possible
 - Implement remaining overload permutations of existing methods
