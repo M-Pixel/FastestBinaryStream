@@ -59,5 +59,54 @@ namespace FastestBinaryStream
 		{
 			ReleaseUnmanagedResources();
 		}
+
+
+		/// Set the position of the head relative to the buffer.
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream SetHeadByOffset(int byteIndex) => SetHeadByOffset((long) byteIndex);
+
+		/// Set the position of the head relative to the buffer.
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream SetHeadByOffset(long byteIndex)
+		{
+			_head = _memory + byteIndex;
+			return this;
+		}
+
+		/// Set the head to a precise location in memory.  You're responsible for ensuring that the address you give
+		/// falls within the buffer.
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream SetHeadByAddress(IntPtr head) => SetHeadByAddress((byte*) head);
+
+		/// Set the head to a precise location in memory.  You're responsible for ensuring that the address you give
+		/// falls within the buffer.
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream SetHeadByAddress(byte* address)
+		{
+			_head = address;
+			return this;
+		}
+
+		/// Change the position of the head relative to its current position.  To move it backwards, use a negative
+		/// number of bytes to skip.
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream Skip(int bytesToSkip) => Skip((long) bytesToSkip);
+		
+		/// Change the position of the head relative to its current position.  To move it backwards, use a negative
+		/// number of bytes to skip.
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream Skip(long bytesToSkip)
+		{
+			_head += bytesToSkip;
+			return this;
+		}
+
+		/// Set the head to the beginning of the buffer.  Equivalent to SetHeadByOffset(0).
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream Rewind()
+		{
+			_head = _memory;
+			return this;
+		}
 	}
 }
