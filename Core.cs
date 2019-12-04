@@ -30,10 +30,20 @@ namespace FastestBinaryStream
 		
 		
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream(int bufferSize)
+		public BinaryStream(int bufferSize) : this(Marshal.AllocHGlobal(bufferSize))
 		{
-			_memory = (byte*) Marshal.AllocHGlobal(bufferSize);
-			_head = _memory;
+		}
+		
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream(IntPtr memory) : this((byte*) memory)
+		{
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream(byte* memory)
+		{
+			_memory = memory;
+			_head = memory;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
