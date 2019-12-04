@@ -108,5 +108,55 @@ namespace FastestBinaryStream
 			_head = _memory;
 			return this;
 		}
+
+
+		/// Get the address of the buffer.
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream ReportMemoryAddress(out IntPtr address)
+		{
+			address = (IntPtr) _memory;
+			return this;
+		}
+
+		/// Get the address of the buffer.
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream ReportMemoryAddress(out byte* address)
+		{
+			address = _memory;
+			return this;
+		}
+
+		/// Get the address of the head.
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream ReportHeadAddress(out IntPtr address)
+		{
+			address = (IntPtr) _head;
+			return this;
+		}
+
+		/// Get the address of the head.
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream ReportHeadAddress(out byte* address)
+		{
+			address = _head;
+			return this;
+		}
+
+		/// Get the offset of the head from the base of the buffer.
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream ReportHeadOffset(out long offset)
+		{
+			offset = _head - _memory;
+			return this;
+		}
+
+		/// Create a copy of this Stream object in its current state.  Does not copy the underlying memory.  This is an
+		/// easy way to "bookmark" a place in the buffer for later use.
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public BinaryStream Fork(out BinaryStream fork)
+		{
+			fork = new BinaryStream(_memory) {_head = _head};
+			return this;
+		}
 	}
 }
