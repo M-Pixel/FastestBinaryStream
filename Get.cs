@@ -25,91 +25,15 @@ namespace FastestBinaryStream
 	public unsafe ref partial struct BinaryStream
 	{
 		/// <summary>
-		/// Copies the next <see cref="sbyte"/> of the stream to a stack variable without advancing the head.
+		/// Copies the next <c>T</c> of the stream to a stack variable without advancing the head.
 		/// </summary>
-		/// <returns>The <see cref="sbyte"/> at the stream's head.</returns>
+		/// <param name="value">Returns the <c>T</c> at the stream's head.</param>
+		/// <returns><c>this</c>, for fluent operation.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public sbyte GetSByte() => ((sbyte*) _head)[0];
-		
-		/// <summary>
-		/// Copies the next <see cref="byte"/> of the stream to a stack variable without advancing the head.
-		/// </summary>
-		/// <returns>The <see cref="byte"/> at the stream's head.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public byte GetByte() => _head[0];
-		
-		/// <summary>
-		/// Copies the next <see cref="bool"/> of the stream to a stack variable without advancing the head.
-		/// </summary>
-		/// <returns>The <see cref="bool"/> at the stream's head.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public bool GetBool() => ((bool*) _head)[0];
-		
-		/// <summary>
-		/// Copies the next <see cref="short"/> of the stream to a stack variable without advancing the head.
-		/// </summary>
-		/// <returns>The <see cref="short"/> at the stream's head.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public short GetShort() => ((short*) _head)[0];
-		
-		/// <summary>
-		/// Copies the next <see cref="ushort"/> of the stream to a stack variable without advancing the head.
-		/// </summary>
-		/// <returns>The <see cref="ushort"/> at the stream's head.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public ushort GetUShort() => ((ushort*) _head)[0];
-		
-		/// <summary>
-		/// Copies the next <see cref="char"/> of the stream to a stack variable without advancing the head.
-		/// </summary>
-		/// <returns>The <see cref="char"/> at the stream's head.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public char GetChar() => ((char*) _head)[0];
-		
-		/// <summary>
-		/// Copies the next <see cref="int"/> of the stream to a stack variable without advancing the head.
-		/// </summary>
-		/// <returns>The <see cref="int"/> at the stream's head.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public int GetInt() => ((int*) _head)[0];
-		
-		/// <summary>
-		/// Copies the next <see cref="uint"/> of the stream to a stack variable without advancing the head.
-		/// </summary>
-		/// <returns>The <see cref="uint"/> at the stream's head.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public uint GetUInt() => ((uint*) _head)[0];
-		
-		/// <summary>
-		/// Copies the next <see cref="long"/> of the stream to a stack variable without advancing the head.
-		/// </summary>
-		/// <returns>The <see cref="long"/> at the stream's head.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public long GetLong() => ((long*) _head)[0];
-		
-		/// <summary>
-		/// Copies the next <see cref="ulong"/> of the stream to a stack variable without advancing the head.
-		/// </summary>
-		/// <returns>The <see cref="ulong"/> at the stream's head.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public ulong GetULong() => ((ulong*) _head)[0];
-		
-		/// <summary>
-		/// Copies the next <see cref="decimal"/> of the stream to a stack variable without advancing the head.
-		/// </summary>
-		/// <returns>The <see cref="decimal"/> at the stream's head.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public decimal GetDecimal() => ((decimal*) _head)[0];
-		
-		/// <summary>Copies a subset of the stream into managed memory without advancing the head.</summary>
-		/// <param name="lengthBytes">The quantity of bytes to retrieve.</param>
-		/// <returns>The stream, starting from the head, as a <see cref="byte"/> array.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI, NotNull]
-		public byte[] GetByteArray(int lengthBytes)
+		public BinaryStream Get<T>(out T value) where T : unmanaged
 		{
-			var outArray = new byte[lengthBytes];
-			Marshal.Copy((IntPtr) _head, outArray, 0, lengthBytes);
-			return outArray;
+			value = ((T*) _head)[0];
+			return this;
 		}
 
 		/// <summary>Copies a subset of the stream into managed memory without advancing the head.</summary>
@@ -119,7 +43,8 @@ namespace FastestBinaryStream
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
 		public BinaryStream GetByteArray(int lengthBytes, out byte[] value)
 		{
-			value = GetByteArray(lengthBytes);
+			value = new byte[lengthBytes];
+			Marshal.Copy((IntPtr) _head, value, 0, lengthBytes);
 			return this;
 		}
 	}

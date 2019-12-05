@@ -38,16 +38,20 @@ namespace FastestBinaryStream
 		/// Converts the stream, from position 0 to the head, to their equivalent <see cref="string"/> representation
 		/// as encoded with base-64 digits.
 		/// </summary>
-		/// <returns>
-		/// The <see cref="string"/> representation, in base 64, of the stream from position 0 to the head.
-		/// </returns>
+		/// <param name="value">
+		/// Returns the <see cref="string"/> representation, in base 64, of the stream from position 0 to the head.
+		/// </param>
+		/// <param name="resultLengthChars">
+		/// Returns the quantity of characters required for the base 64 representation.
+		/// </param>
+		/// <returns><c>this</c>, for fluent operation.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public string FlushBase64String()
+		public BinaryStream FlushBase64String(out string value, out int resultLengthChars)
 		{
 			var length = _head - _memory;
-			_head = _memory;
-			var x = ReadBase64String((int) length);
-			return x;
+			Rewind();
+			ReadBase64String((int) length, out value, out resultLengthChars);
+			return this;
 		}
 
 		/// <summary>
@@ -59,25 +63,22 @@ namespace FastestBinaryStream
 		/// </param>
 		/// <returns><c>this</c>, for fluent operation.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream FlushBase64String(out string value)
-		{
-			value = FlushBase64String();
-			return this;
-		}
+		public BinaryStream FlushBase64String(out string value) => FlushBase64String(out value, out _);
 
 		/// <summary>
 		/// Converts a subset of the stream to its equivalent <see cref="string"/> representation as encoded with
 		/// base-64 digits.
 		/// </summary>
 		/// <param name="lengthBytes">The quantity of bytes to convert.</param>
+		/// <param name="value">
+		/// Returns the <see cref="string"/> representation, in base 64, of the stream, starting from the head.
+		/// </param>
 		/// <param name="resultLengthChars">
 		/// Returns the quantity of characters required for the base 64 representation.
 		/// </param>
-		/// <returns>
-		/// The <see cref="string"/> representation, in base 64, of the stream, starting from the head.
-		/// </returns>
+		/// <returns><c>this</c>, for fluent operation.</returns>
 		[PublicAPI]
-		public string ReadBase64String(int lengthBytes, out int resultLengthChars)
+		public BinaryStream ReadBase64String(int lengthBytes, out string value, out int resultLengthChars)
 		{
 			/**
 			 * Regarding the contents of this method, which are derived from Mono's MIT-licensed implementation of
@@ -99,7 +100,7 @@ namespace FastestBinaryStream
 			 * THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			 */
 			resultLengthChars = (int) (lengthBytes / 3L * 4L + (lengthBytes % 3 != 0 ? 4L : 0L));
-			var value = new string('\0', resultLengthChars);
+			value = new string('\0', resultLengthChars);
 			fixed (char* outChars = value)
 			{
 				var remainder = lengthBytes % 3;
@@ -137,19 +138,8 @@ namespace FastestBinaryStream
 				}
 			}
 
-			return value;
+			return this;
 		}
-
-		/// <summary>
-		/// Converts a subset of the stream to its equivalent <see cref="string"/> representation as encoded with
-		/// base-64 digits.
-		/// </summary>
-		/// <param name="lengthBytes">The quantity of bytes to convert.</param>
-		/// <returns>
-		/// The <see cref="string"/> representation, in base 64, of the stream, starting from the head.
-		/// </returns>
-		[PublicAPI]
-		public string ReadBase64String(int lengthBytes) => ReadBase64String(lengthBytes, out int _);
 
 		/// <summary>
 		/// Converts a subset of the stream to its equivalent <see cref="string"/> representation as encoded with
@@ -161,27 +151,8 @@ namespace FastestBinaryStream
 		/// </param>
 		/// <returns><c>this</c>, for fluent operation.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream ReadBase64String(int lengthBytes, out string value)
-		{
-			value = ReadBase64String(lengthBytes);
-			return this;
-		}
-		
-		/// <summary>
-		/// Converts the stream, from position 0 to the head, to their equivalent ASCII string representation as encoded
-		/// with base-64 digits.
-		/// </summary>
-		/// <returns>
-		/// The ASCII string representation, in base 64, of the stream from position 0 to the head.
-		/// </returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public byte[] FlushBase64ASCII()
-		{
-			var length = _head - _memory;
-			_head = _memory;
-			var x = ReadBase64ASCII((int) length);
-			return x;
-		}
+		public BinaryStream ReadBase64String(int lengthBytes, out string value) =>
+			ReadBase64String(lengthBytes, out value, out _);
 
 		/// <summary>
 		/// Converts the stream, from position 0 to the head, to their equivalent ASCII string representation as encoded
@@ -194,8 +165,9 @@ namespace FastestBinaryStream
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
 		public BinaryStream FlushBase64ASCII(out byte[] value)
 		{
-			value = FlushBase64ASCII();
-			return this;
+			var length = _head - _memory;
+			Rewind();
+			return ReadBase64ASCII((int) length, out value);
 		}
 
 		/// <summary>
@@ -203,14 +175,15 @@ namespace FastestBinaryStream
 		/// digits.
 		/// </summary>
 		/// <param name="lengthBytes">The quantity of bytes to convert.</param>
+		/// <param name="value">
+		/// Returns the ASCII string representation, in base 64, of the stream, starting from the head.
+		/// </param>
 		/// <param name="resultLengthChars">
 		/// Returns the quantity of characters required for the base 64 representation.
 		/// </param>
-		/// <returns>
-		/// The ASCII string representation, in base 64, of the stream, starting from the head.
-		/// </returns>
+		/// <returns><c>this</c>, for fluent operation.</returns>
 		[PublicAPI]
-		public byte[] ReadBase64ASCII(int lengthBytes, out int resultLengthChars)
+		public BinaryStream ReadBase64ASCII(int lengthBytes, out byte[] value, out int resultLengthChars)
 		{
 			/**
 			 * Regarding the contents of this method, which are derived from Mono's MIT-licensed implementation of
@@ -232,7 +205,7 @@ namespace FastestBinaryStream
 			 * THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			 */
 			resultLengthChars = (int) (lengthBytes / 3L * 4L + (lengthBytes % 3 != 0 ? 4L : 0L));
-			var value = new byte[resultLengthChars];
+			value = new byte[resultLengthChars];
 			fixed (byte* outChars = value)
 			{
 				var remainder = lengthBytes % 3;
@@ -270,19 +243,8 @@ namespace FastestBinaryStream
 				}
 			}
 
-			return value;
+			return this;
 		}
-
-		/// <summary>
-		/// Converts a subset of the stream to its equivalent ASCII string representation as encoded with base-64
-		/// digits.
-		/// </summary>
-		/// <param name="lengthBytes">The quantity of bytes to convert.</param>
-		/// <returns>
-		/// The ASCII string representation, in base 64, of the stream, starting from the head.
-		/// </returns>
-		[PublicAPI]
-		public byte[] ReadBase64ASCII(int lengthBytes) => ReadBase64ASCII(lengthBytes, out int _);
 
 		/// <summary>
 		/// Converts a subset of the stream to its equivalent ASCII string representation as encoded with base-64
@@ -294,10 +256,7 @@ namespace FastestBinaryStream
 		/// </param>
 		/// <returns><c>this</c>, for fluent operation.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream ReadBase64ASCII(int lengthBytes, out byte[] value)
-		{
-			value = ReadBase64ASCII(lengthBytes);
-			return this;
-		}
+		public BinaryStream ReadBase64ASCII(int lengthBytes, out byte[] value) =>
+			ReadBase64ASCII(lengthBytes, out value, out _);
 	}
 }

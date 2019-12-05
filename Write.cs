@@ -22,121 +22,13 @@ namespace FastestBinaryStream
 {
 	public unsafe ref partial struct BinaryStream
 	{
-		/// <summary>Writes a <see cref="sbyte"/> to the stream, and advances the head.</summary>
+		/// <summary>Writes a <see cref="T"/> to the stream, and advances the head.</summary>
 		/// <param name="value">The value to write.</param>
 		/// <returns><c>this</c>, for fluent operation.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream Write(sbyte value)
+		public BinaryStream Write<T>(T value) where T : unmanaged 
 		{
-			*(sbyte*) _head++ = value;
-			return this;
-		}
-		
-		/// <summary>Writes a <see cref="byte"/> to the stream, and advances the head.</summary>
-		/// <param name="value">The value to write.</param>
-		/// <returns><c>this</c>, for fluent operation.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream Write(byte value)
-		{
-			*_head++ = value;
-			return this;
-		}
-		
-		/// <summary>Writes a <see cref="bool"/> to the stream, and advances the head.</summary>
-		/// <param name="value">The value to write.</param>
-		/// <returns><c>this</c>, for fluent operation.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream Write(bool value)
-		{
-			*(bool*) _head++ = value;
-			return this;
-		}
-
-		/// <summary>Writes a <see cref="short"/> to the stream, and advances the head.</summary>
-		/// <param name="value">The value to write.</param>
-		/// <returns><c>this</c>, for fluent operation.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream Write(short value)
-		{
-			Put(value);
-			_head += sizeof(short);
-			return this;
-		}
-
-		/// <summary>Writes a <see cref="ushort"/> to the stream, and advances the head.</summary>
-		/// <param name="value">The value to write.</param>
-		/// <returns><c>this</c>, for fluent operation.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream Write(ushort value)
-		{
-			Put(value);
-			_head += sizeof(ushort);
-			return this;
-		}
-
-		/// <summary>Writes a <see cref="char"/> to the stream, and advances the head.</summary>
-		/// <param name="value">The value to write.</param>
-		/// <returns><c>this</c>, for fluent operation.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream Write(char value)
-		{
-			Put(value);
-			_head += sizeof(char);
-			return this;
-		}
-
-		/// <summary>Writes an <see cref="int"/> to the stream, and advances the head.</summary>
-		/// <param name="value">The value to write.</param>
-		/// <returns><c>this</c>, for fluent operation.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream Write(int value)
-		{
-			Put(value);
-			_head += sizeof(int);
-			return this;
-		}
-
-		/// <summary>Writes a <see cref="uint"/> to the stream, and advances the head.</summary>
-		/// <param name="value">The value to write.</param>
-		/// <returns><c>this</c>, for fluent operation.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream Write(uint value)
-		{
-			Put(value);
-			_head += sizeof(uint);
-			return this;
-		}
-
-		/// <summary>Writes a <see cref="long"/> to the stream, and advances the head.</summary>
-		/// <param name="value">The value to write.</param>
-		/// <returns><c>this</c>, for fluent operation.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream Write(long value)
-		{
-			Put(value);
-			_head += sizeof(long);
-			return this;
-		}
-
-		/// <summary>Writes a <see cref="ulong"/> to the stream, and advances the head.</summary>
-		/// <param name="value">The value to write.</param>
-		/// <returns><c>this</c>, for fluent operation.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream Write(ulong value)
-		{
-			Put(value);
-			_head += sizeof(ulong);
-			return this;
-		}
-
-		/// <summary>Writes a <see cref="decimal"/> to the stream, and advances the head.</summary>
-		/// <param name="value">The value to write.</param>
-		/// <returns><c>this</c>, for fluent operation.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		public BinaryStream Write(decimal value)
-		{
-			Put(value);
-			_head += sizeof(decimal);
+			*(T*) _head++ = value;
 			return this;
 		}
 

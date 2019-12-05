@@ -22,20 +22,6 @@ namespace FastestBinaryStream
 {
 	public unsafe ref partial struct BinaryStream
 	{
-		/// <param name="lengthBytes">Returns the quantity of bytes to be flushed.</param>
-		/// <returns>The stream, from position 0 to the head, as a <see cref="byte"/> array.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI, NotNull]
-		public byte[] FlushByteArray(out int lengthBytes)
-		{
-			lengthBytes = (int) (_head - _memory);
-			_head = _memory;
-			return ReadByteArray(lengthBytes);
-		}
-
-		/// <returns>The stream, from position 0 to the head, as a <see cref="byte"/> array.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI, NotNull]
-		public byte[] FlushByteArray() => FlushByteArray(out int _);
-
 		/// <param name="value">
 		/// Returns the stream, from position 0 to the head, as a <see cref="byte"/> array.
 		/// </param>
@@ -44,8 +30,9 @@ namespace FastestBinaryStream
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
 		public BinaryStream FlushByteArray(out byte[] value, out int lengthBytes)
 		{
-			value = FlushByteArray(out lengthBytes);
-			return this;
+			lengthBytes = (int) (_head - _memory);
+			Rewind();
+			return ReadByteArray(lengthBytes, out value);
 		}
 
 		/// <param name="value">
