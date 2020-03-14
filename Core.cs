@@ -54,10 +54,35 @@ namespace FastestBinaryStream
 			_head = null;
 		}
 
+		/// <summary>
+		/// Dispose must be called before this instance is dereferenced, otherwise its memory will never be deallocated.
+		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
 		public void Dispose()
 		{
 			ReleaseUnmanagedResources();
+		}
+
+		/// <summary>
+		/// Dispose must be called before this instance is dereferenced, otherwise its memory will never be deallocated.
+		///
+		/// This version of Dispose returns a value that it is given, to facilitate using this class in bracket-less
+		/// lambda expressions.  For example,
+		/// <code>
+		/// byte[] SomePureMethod(SomethingWorthSerializing x) => new BinaryStream(64)
+		///     .Write(x.A)
+		///     .Write(x.B)
+		///     .FlushBase64String(out var returnValue)
+		///     .DisposeAndReturn(returnValue);
+		/// </code>
+		/// </summary>
+		/// <param name="valueToReturn">Value that you want to be returned by this method.</param>
+		/// <returns><see cref="valueToReturn"/></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public T DisposeAndReturn<T>(T valueToReturn)
+		{
+			ReleaseUnmanagedResources();
+			return valueToReturn;
 		}
 
 
