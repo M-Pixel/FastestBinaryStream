@@ -55,7 +55,10 @@ namespace FastestBinaryStream
 		}
 
 		/// <summary>
-		/// Dispose must be called before this instance is dereferenced, otherwise its memory will never be deallocated.
+		/// If the <c>int bufferSize</c> constructor is used, then Dispose must be called before the instance is
+		/// de-referenced, otherwise its memory will never be de-allocated.  Alternately, <see cref="ReturnIntPtr"/> may
+		/// be called, in which case the returned <see cref="IntPtr"/> would need to be passed to
+		/// <see cref="Marshal.FreeHGlobal"/> before it is de-referenced, in order to prevent a memory leak.
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
 		public void Dispose()
@@ -64,7 +67,8 @@ namespace FastestBinaryStream
 		}
 
 		/// <summary>
-		/// Dispose must be called before this instance is dereferenced, otherwise its memory will never be deallocated.
+		/// If the <c>int bufferSize</c> constructor is used, then Dispose must be called before the instance is
+		/// de-referenced, otherwise its memory will never be de-allocated.
 		///
 		/// This version of Dispose returns a value that it is given, to facilitate using this class in bracket-less
 		/// lambda expressions.  For example,
@@ -84,6 +88,26 @@ namespace FastestBinaryStream
 			FreeUnmanagedResources();
 			return valueToReturn;
 		}
+
+		/// <summary>
+		/// This method returns the value that it is given, to facilitate using this class in bracket-less lambda
+		/// expressions.  For example,
+		/// <code>
+		/// string SomePureMethod(IntPtr x, int index) => new BinaryStream(x)
+		///     .Skip(index * 2)
+		///     .ReadByte(out var offset)
+		///     .ReadByte(out var length)
+		///     .SetHeadByOffset(offset)
+		///     .ReadBase64String(length, out var returnValue)
+		///     .Return(returnValue);
+		/// </code>
+		/// Note: If using the <c>int bufferSize</c> constructor, you must use <see cref="DisposeAndReturn{T}"/>
+		/// instead, otherwise the memory will never be released.
+		/// </summary>
+		/// <param name="valueToReturn">Value that you want to be returned by this method.</param>
+		/// <returns><see cref="valueToReturn"/></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
+		public T Return<T>(T valueToReturn) => valueToReturn;
 
 
 		/// Set the position of the head relative to the buffer.
