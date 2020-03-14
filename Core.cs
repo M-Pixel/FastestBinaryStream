@@ -47,9 +47,9 @@ namespace FastestBinaryStream
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
-		private void ReleaseUnmanagedResources()
+		private void FreeUnmanagedResources()
 		{
-			Marshal.Release((IntPtr) _memory);
+			Marshal.FreeHGlobal((IntPtr) _memory);
 			_memory = null;
 			_head = null;
 		}
@@ -60,7 +60,7 @@ namespace FastestBinaryStream
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
 		public void Dispose()
 		{
-			ReleaseUnmanagedResources();
+			FreeUnmanagedResources();
 		}
 
 		/// <summary>
@@ -81,7 +81,7 @@ namespace FastestBinaryStream
 		[MethodImpl(MethodImplOptions.AggressiveInlining), PublicAPI]
 		public T DisposeAndReturn<T>(T valueToReturn)
 		{
-			ReleaseUnmanagedResources();
+			FreeUnmanagedResources();
 			return valueToReturn;
 		}
 
