@@ -31,7 +31,7 @@ namespace FastestBinaryStream
 		public BinaryStream Read<T>(out T value) where T : unmanaged
 		{
 			Get(out value);
-			_head += sizeof(short);
+			_head += sizeof(T);
 			return this;
 		}
 
