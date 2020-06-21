@@ -3,6 +3,7 @@
 **/.idea/**/tasks.xml
 **/.idea/shelf/*
 **/.idea/dictionaries
+**/.idea/httpRequests/
 
 # Sensitive or high-churn files
 **/.idea/**/dataSources/
@@ -17,6 +18,7 @@
 **/.idea/**/*.iml
 **/.idea/**/contentModel.xml
 **/.idea/**/modules.xml
+**/.idea/**/projectSettingsUpdater.xml
 
 *.suo
 *.user
