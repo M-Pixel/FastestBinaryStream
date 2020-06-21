@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastestBinaryStream", "FastestBinaryStream.csproj", "{A79E152E-51C7-41BF-B192-C8EFD5C660C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastestBinaryStream", "FastestBinaryStream/FastestBinaryStream.csproj", "{A79E152E-51C7-41BF-B192-C8EFD5C660C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
